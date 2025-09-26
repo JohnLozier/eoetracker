@@ -12,7 +12,9 @@ import { eq } from "drizzle-orm";
 import toJSON from "zod-to-json-schema";
 import { z } from "zod";
 
-const cerebras = new Cerebras();
+const cerebras = new Cerebras({
+	apiKey: process.env.CEREBRAS_API_KEY
+});
 
 const askCerebras = async <T>({ schema, prompt, system }: {
 	schema: z.ZodSchema<T>,
