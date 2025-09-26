@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "days_user_id_date_unique" ON "days" USING btree ("user_id","date");

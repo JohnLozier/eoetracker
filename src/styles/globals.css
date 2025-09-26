@@ -1,6 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 200;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-UltraLight.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 300;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-Light.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 400;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-Regular.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 500;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-Medium.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 600;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-SemiBold.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 700;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-Bold.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 800;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-ExtraBold.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Mona-Sans";
+	font-style: normal;
+	font-weight: 900;
+	src: local("Mona-Sans"), url("https://fonts.cdnfonts.com/s/91271/Mona-Sans-Black.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Montserrat";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url(https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2) format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--font-montserrat: "Montserrat";
+	--font-mona: "Mona-Sans";
 }
