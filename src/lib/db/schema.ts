@@ -2,9 +2,9 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	uniqueIndex,
 	uuid,
-	varchar,
-	uniqueIndex
+	varchar
 } from "drizzle-orm/pg-core";
 
 export const days = pgTable(
