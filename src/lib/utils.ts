@@ -10,11 +10,11 @@ DayJS.extend(timezone);
 export const cn = (...inputs: ClassValue[]) =>
 	twMerge(clsx(inputs));
 
-export const floorDate = (date: number, timezone: string) => {
-	return DayJS(date).tz(timezone).startOf("day").valueOf();
-};
+export const floorDate = (date: number, timezone: string) =>
+	DayJS(date * 1000).tz(timezone).startOf("day").valueOf();
 
-export const getTimezone = () => DayJS.tz.guess();
+export const getTimezone = () =>
+	DayJS.tz.guess();
 
 export const isBetween = (value: number | string, min: number, max: number) => {
 	const length = typeof value == "number" ? value : value.length;
