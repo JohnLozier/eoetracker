@@ -15,9 +15,9 @@ import { z } from "zod";
 const cerebras = new Cerebras();
 
 const askCerebras = async <T>({ schema, prompt, system }: {
-	schema: z.ZodSchema<T>,
-	prompt: string,
-	system: string
+	schema: z.ZodSchema<T>;
+	prompt: string;
+	system: string;
 }) => {
 	try {
 		const { choices } = await cerebras.chat.completions.create({
@@ -39,7 +39,7 @@ const askCerebras = async <T>({ schema, prompt, system }: {
 		const json = JSON.parse((choices as {
 			message: {
 				content: string;
-			}
+			};
 		}[])[0].message.content);
 
 		return schema.parse(json) as T;
@@ -93,7 +93,7 @@ export const setToday = async (options: Exclude<Day, "symptoms">, timezone: stri
 
 		if (!userId) return constructError("Unauthorized");
 		if (options.severity == undefined || !isBetween(options.severity, 0, 10)) return constructError("Invalid severity");
-		if (!options.date || !isBetween(DayJS(options.date).unix(), 0, Date.now() + 86_400)) return constructError("Invalid date");
+		if (!options.date || !isBetween(DayJS(options.date).valueOf(), 0, Date.now() + 86_400_000)) return constructError("Invalid date");
 		if (!isBetween(options.foods.length, 1, 256)) return constructError("Invalid food description");
 		if (!isBetween(timezone.length, 1, 100)) return constructError("Invalid timezone");
 		const day = floorDate(DayJS(options.date).unix(), timezone);
@@ -117,8 +117,8 @@ export const setToday = async (options: Exclude<Day, "symptoms">, timezone: stri
 			}),
 			system: "You will be given a list of the foods and meals consumed in a single day for a person with EoE (Eosinophilic esophagitis). Break down the foods consumed into the trigger categories listed and provide an estimation of what percentage of the diet each category represents for that specific day. The categories are: Dairy, Wheat, Soy, Egg, Nuts, Fish/Shellfish, Corn, Meat, Other. Do not reuse categories. The total percentage must add up to 100%.",
 			prompt: options.foods.map(({ time, description }) =>
-				`description of food: ${ description }
-				time of meal: ${ time ?? "unspecified" }`
+				`description of food: ${description}
+				time of meal: ${time ?? "unspecified"}`
 			).join("\n")
 		}) ?? {
 			foods: []
@@ -140,7 +140,7 @@ export const setToday = async (options: Exclude<Day, "symptoms">, timezone: stri
 				date: day
 			})
 			.onConflictDoUpdate({
-				target: [ days.userId, days.date ],
+				target: [days.userId, days.date],
 				set: {
 					symptoms: options.severity,
 					triggers: foodsMap
@@ -215,10 +215,10 @@ export const getAll = async (): Promise<{
 				}),
 				system: "You will be given the history of the triggers consumed (in a percentage of that days diet) and symptom severity experienced of a person with EoE (Eosinophilic esophagitis). Provide a list of the most likely trigger food categories and an estimated percentage likelihood based on the trends of their data. The possible categories are: Dairy, Wheat, Soy, Egg, Nuts, Fish/Shellfish, Corn, Meat, Other. Do not reuse categories. Only return categories that have a decent likelihood of being triggers. Take into account that symptoms of EoE may only appear days to weeks after consuming a trigger food and that effects from triggers can be cumulative or have started before the symptom tracking.",
 				prompt: data.map(({ triggers, symptoms, date }) =>
-					`date: ${ date }
-					symptom severity: ${ symptoms }
+					`date: ${date}
+					symptom severity: ${symptoms}
 					triggers consumed: [
-						${ Object.entries(triggers).map(([ type, percent ]) => `${ type }: ${ percent }%`).join("\d\t") }
+						${Object.entries(triggers).map(([type, percent]) => `${type}: ${percent}%`).join("\d\t")}
 					]`
 				).join("\n\d")
 			}))?.triggers ?? [];
@@ -236,4 +236,34 @@ export const getAll = async (): Promise<{
 
 		return constructError((error as Error).message);
 	};
+};
+
+export const hasUserSubmitted = async (): Promise<{
+	successful: true;
+	result: boolean;
+} | {
+	successful: false;
+	reason: string;
+	result?: undefined;
+}> => {
+	try {
+		const { userId } = await auth();
+
+		if (!userId) return constructError("Unauthorized");
+
+		const data = await db
+			.select({ id: days.id })
+			.from(days)
+			.where(eq(days.userId, userId))
+			.limit(1);
+
+		return {
+			successful: true,
+			result: data.length > 0
+		};
+	} catch (error) {
+		console.error(error);
+
+		return constructError((error as Error).message);
+	}
 };

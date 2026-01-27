@@ -1,4 +1,5 @@
 import {
+	bigint,
 	integer,
 	jsonb,
 	pgTable,
@@ -12,7 +13,7 @@ export const days = pgTable(
 	{
 		id: uuid().primaryKey().defaultRandom(),
 		userId: varchar("user_id", { length: 256 }).notNull(), // From Clerk
-		date: integer("date").notNull(), // number of days since epoch
+		date: bigint("date", { mode: "number" }).notNull(), // millisecond timestamp
 		symptoms: integer("symptoms").notNull(), // 0-100
 		triggers: jsonb("triggers").$type<Record<string, number>>().notNull()
 	},

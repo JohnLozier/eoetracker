@@ -7,12 +7,12 @@ import { getAll } from "~/lib/actions";
 const Graphs = ({ showPopup }: {
 	showPopup: boolean;
 }) => {
-	const [ data, setData ] = useState<{
+	const [data, setData] = useState<{
 		symptoms: number;
 		triggers: Record<string, number>;
 		date: number;
 	}[]>([]);
-	const [ triggers, setTriggers ] = useState<Array<{
+	const [triggers, setTriggers] = useState<Array<{
 		type: "Dairy" | "Wheat" | "Soy" | "Egg" | "Nuts" | "Fish/Shellfish" | "Corn" | "Meat" | "Other";
 		percent: number;
 	}>>([]);
@@ -27,11 +27,11 @@ const Graphs = ({ showPopup }: {
 		"Corn",
 		"Meat",
 		"Other"
-	] as const).map(trigger => [ trigger.toLowerCase(), data.map(({ date, symptoms, triggers }) => ({
+	] as const).map(trigger => [trigger.toLowerCase(), data.map(({ date, symptoms, triggers }) => ({
 		date,
 		symptoms,
 		trigger: (triggers[trigger] ?? 0)
-	})) ])), [ data ]) as any as Record<"dairy" | "wheat" | "soy" | "egg" | "nuts" | "fish/shellfish" | "corn" | "meat" | "other", {
+	}))])), [data]) as any as Record<"dairy" | "wheat" | "soy" | "egg" | "nuts" | "fish/shellfish" | "corn" | "meat" | "other", {
 		date: number;
 		symptoms: number;
 		trigger: number;
@@ -47,23 +47,27 @@ const Graphs = ({ showPopup }: {
 				setTriggers(res.result.triggers);
 			}
 		})();
-	}, [ showPopup ]);
+	}, [showPopup]);
 
 	return <div className="flex flex-col gap-5 px-5 pb-5">
-		{ triggers.length > 0 &&
-			<Suggestions triggers={ triggers } />
+		{triggers.length > 0 &&
+			<Suggestions triggers={triggers} />
 		}
-		{ data.length > 0 ? <>
-			<Chart data={ dairy } trigger="Dairy" />
-			<Chart data={ wheat } trigger="Wheat" />
-			<Chart data={ soy } trigger="Soy" />
-			<Chart data={ egg } trigger="Egg" />
-			<Chart data={ nuts } trigger="Nuts" />
-			<Chart data={ fishShellfish } trigger="Fish/Shellfish" />
-			<Chart data={ corn } trigger="Corn" />
-			<Chart data={ meat } trigger="Meat" />
-			<Chart data={ other } trigger="Other" />
-		</> : <h1 className="font-mona text-xl text-zinc-600 font-bold">Not enough data to generate graphs. Try recording more</h1> }
+		{data.length > 0 ? <>
+			<Chart data={dairy} trigger="Dairy" />
+			<Chart data={wheat} trigger="Wheat" />
+			<Chart data={soy} trigger="Soy" />
+			<Chart data={egg} trigger="Egg" />
+			<Chart data={nuts} trigger="Nuts" />
+			<Chart data={fishShellfish} trigger="Fish/Shellfish" />
+			<Chart data={corn} trigger="Corn" />
+			<Chart data={meat} trigger="Meat" />
+			<Chart data={other} trigger="Other" />
+			{
+				triggers.length == 0 &&
+				<h1 className="font-mona text-sm text-zinc-400 text-center font-medium">Not enough data to generate suggestions. Try recording for at least two weeks.</h1>
+			}
+		</> : <h1 className="font-mona text-xl text-zinc-600 font-bold">Not enough data to generate graphs. Try recording more</h1>}
 	</div>;
 };
 
