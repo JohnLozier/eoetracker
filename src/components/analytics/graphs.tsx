@@ -4,9 +4,10 @@ import Chart from "./chart";
 import Suggestions from "./suggestions";
 import { getAll } from "~/lib/actions";
 
-const Graphs = ({ showPopup, analyticsAnchorRef }: {
+const Graphs = ({ showPopup, analyticsAnchorRef, setHasGraphs }: {
 	showPopup: boolean;
 	analyticsAnchorRef: RefObject<HTMLDivElement | null>;
+	setHasGraphs: (hasGraphs: boolean) => void;
 }) => {
 	const [data, setData] = useState<{
 		symptoms: number;
@@ -41,11 +42,13 @@ const Graphs = ({ showPopup, analyticsAnchorRef }: {
 	useEffect(() => {
 		if (showPopup || window == undefined) return;
 
+		setHasGraphs(false);
 		(async () => {
 			const res = await getAll();
 			if (res.successful) {
 				setData(res.result.data);
 				setTriggers(res.result.triggers);
+				setHasGraphs(res.result.data.length > 0);
 			}
 		})();
 	}, [showPopup]);
