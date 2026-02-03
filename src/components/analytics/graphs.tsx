@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { RefObject, useEffect, useMemo, useState } from "react";
 
 import Chart from "./chart";
 import Suggestions from "./suggestions";
 import { getAll } from "~/lib/actions";
 
-const Graphs = ({ showPopup }: {
+const Graphs = ({ showPopup, analyticsAnchorRef }: {
 	showPopup: boolean;
+	analyticsAnchorRef: RefObject<HTMLDivElement | null>;
 }) => {
 	const [data, setData] = useState<{
 		symptoms: number;
@@ -51,7 +52,9 @@ const Graphs = ({ showPopup }: {
 
 	return <div className="flex flex-col gap-5 px-5 pb-5">
 		{triggers.length > 0 &&
-			<Suggestions triggers={triggers} />
+			<div ref={analyticsAnchorRef} id="ai-analytics">
+				<Suggestions triggers={triggers} />
+			</div>
 		}
 		{data.length > 0 ? <>
 			<Chart data={dairy} trigger="Dairy" />
@@ -65,9 +68,9 @@ const Graphs = ({ showPopup }: {
 			<Chart data={other} trigger="Other" />
 			{
 				triggers.length == 0 &&
-				<h1 className="font-mona text-sm text-zinc-400 text-center font-medium">Not enough data to generate suggestions. Try recording for at least two weeks.</h1>
+				<h1 ref={analyticsAnchorRef} id="no-analytics" className="font-mona text-sm text-zinc-400 text-center font-medium">Not enough data to generate suggestions. Try recording for at least two weeks.</h1>
 			}
-		</> : <h1 className="font-mona text-xl text-zinc-600 font-bold">Not enough data to generate graphs. Try recording more</h1>}
+		</> : <h1 ref={analyticsAnchorRef} id="no-analytics" className="font-mona text-xl text-zinc-600 font-bold">Not enough data to generate graphs. Try recording more</h1>}
 	</div>;
 };
 
